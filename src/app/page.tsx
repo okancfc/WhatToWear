@@ -251,21 +251,28 @@ export default function Home() {
 
   const getBackgroundClass = () => {
     if (!weather) return "from-blue-400 to-blue-600";
-    const isDay = weather.sys && weather.sys.sunset
-      ? new Date().getTime() / 1000 < weather.sys.sunset
-      : true;
+  
+    const now = Math.floor(new Date().getTime() / 1000);
+    const { sunrise, sunset } = weather.sys;
+  
+    // Gündüz olup olmadığını kontrol et: şimdi > güneşin doğuşu && şimdi < güneşin batışı
+    const isDay = sunrise && sunset ? now >= sunrise && now < sunset : true;
+  
     const temp = weather.main.temp;
+  
     if (isDay) {
-      if (temp >= 25) return "from-orange-400 to-orange-600";
-      if (temp >= 15) return "from-blue-400 to-blue-500";
-      if (temp >= 5) return "from-blue-300 to-blue-400";
-      return "from-blue-200 to-blue-300";
+      if (temp >= 25) return "from-orange-400 to-orange-600";     // sıcak
+      if (temp >= 15) return "from-blue-400 to-blue-500";          // ılık
+      if (temp >= 5)  return "from-blue-300 to-blue-400";          // serin
+      return "from-blue-200 to-blue-300";                          // soğuk
     } else {
-      if (temp >= 20) return "from-purple-800 to-purple-900";
-      if (temp >= 10) return "from-blue-850 to-blue-950";
-      return "from-indigo-900 to-blue-950";
+      if (temp >= 20) return "from-purple-800 to-purple-900";      // sıcak gece
+      if (temp >= 10) return "from-blue-850 to-blue-950";          // ılık/serin gece
+      return "from-indigo-900 to-blue-950";                        // soğuk gece
     }
   };
+  
+  
 
   const getWeatherIcon = (iconCode?: string) => {
     if (!iconCode) {
