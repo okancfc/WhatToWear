@@ -1,8 +1,16 @@
 @import "tailwindcss";
 
+/* globals.css dosyasında */
 :root {
-  --background: #ffffff;
+  --background: #f5f5f0; /* Krem tonu arka plan */
   --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #f0f0e8; /* Koyu modda biraz daha koyu krem ton */
+    --foreground: #333333;
+  }
 }
 
 @theme inline {
@@ -12,12 +20,6 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
 
 body {
   background: var(--background);
