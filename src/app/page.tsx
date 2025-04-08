@@ -343,7 +343,10 @@ export default function Home() {
   return (
     <div className="min-h-screen w-full overflow-auto">
       <main className="container mx-auto px-4 py-8 flex flex-col items-center min-h-screen">
-        <h1 className="text-4xl font-bold mb-8 text-center text-gray-800">WhatToWear</h1>
+        <div className="flex gap-2">
+          <img src="logo.png" alt="" className="w-13 h-8.5"/>
+          <h1 className="text-4xl font-bold mb-8 text-center text-black">WhatToWear</h1>
+        </div>
         <div className="w-full max-w-md bg-white/10 backdrop-blur-md p-6 rounded-xl shadow-lg mb-8 relative border border-gray-200">
           <form onSubmit={handleSubmit} className="flex gap-2">
             <div className="relative flex-1">
