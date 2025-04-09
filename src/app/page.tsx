@@ -1,9 +1,17 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { 
-  RefreshCw, Search, X, Droplets, Wind, Thermometer,
-  ChevronLeft, ChevronRight, Clock, Calendar 
+import {
+  RefreshCw,
+  Search,
+  X,
+  Droplets,
+  Wind,
+  Thermometer,
+  ChevronLeft,
+  ChevronRight,
+  Clock,
+  Calendar,
 } from "lucide-react";
 
 // Hava durumu veri tipleri
@@ -270,14 +278,14 @@ export default function Home() {
       return "bg-gradient-to-b from-blue-200 to-blue-300";
     } else {
       if (temp >= 20) return "bg-gradient-to-b from-purple-800 to-purple-900";
-      if (temp >= 10) return "bg-gradient-to-b from-blue-850 to-blue-950";
+      if (temp >= 10) return "bg-gradient-to-b from-blue-200 to-blue-950";
       return "bg-gradient-to-b from-indigo-900 to-blue-950";
     }
   };
 
   // Tüm günlük kartlar için ortak arka plan
   const getDailyCardBackground = (temp: number) => {
-    if (temp >= 25) return "bg-gradient-to-b from-orange-400 to-orange-500";
+    if (temp >= 25) return "bg-gradient-to-b from-orange-500 to-orange-600";
     if (temp >= 15) return "bg-gradient-to-b from-blue-400 to-blue-500";
     if (temp >= 5) return "bg-gradient-to-b from-blue-300 to-blue-400";
     return "bg-gradient-to-b from-blue-200 to-blue-300";
@@ -296,12 +304,25 @@ export default function Home() {
   };
 
   // Tarih formatlama
-  const formatDate = (timestamp: number, format: "day" | "hour" | "full" = "full") => {
+  const formatDate = (
+    timestamp: number,
+    format: "day" | "hour" | "full" = "full"
+  ) => {
     const date = new Date(timestamp * 1000);
     const days = ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"];
     const months = [
-      "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran",
-      "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"
+      "Ocak",
+      "Şubat",
+      "Mart",
+      "Nisan",
+      "Mayıs",
+      "Haziran",
+      "Temmuz",
+      "Ağustos",
+      "Eylül",
+      "Ekim",
+      "Kasım",
+      "Aralık",
     ];
     if (format === "day") return days[date.getDay()];
     else if (format === "hour") return `${date.getHours()}:00`;
@@ -341,11 +362,13 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen w-full overflow-auto">
+    <div className="min-h-screen w-full">
       <main className="container mx-auto px-4 py-8 flex flex-col items-center min-h-screen">
         <div className="flex gap-2">
-          <img src="logo.png" alt="" className="w-13 h-8.5"/>
-          <h1 className="text-4xl font-bold mb-8 text-center text-black">WhatToWear</h1>
+          <img src="logo.png" alt="" className="w-13 h-8.5" />
+          <h1 className="text-4xl font-bold mb-8 text-center text-black">
+            WhatToWear
+          </h1>
         </div>
         <div className="w-full max-w-md bg-white/10 backdrop-blur-md p-6 rounded-xl shadow-lg mb-8 relative border border-gray-200">
           <form onSubmit={handleSubmit} className="flex gap-2">
@@ -373,7 +396,11 @@ export default function Home() {
               disabled={loading}
               className="bg-gray-700 hover:bg-gray-800 text-white font-medium px-4 py-2 rounded-lg transition-all flex items-center justify-center disabled:opacity-50"
             >
-              {loading ? <RefreshCw className="h-5 w-5 animate-spin" /> : "Ara"}
+              {loading ? (
+                <RefreshCw className="h-5 w-5 animate-spin" />
+              ) : (
+                "Ara"
+              )}
             </button>
           </form>
         </div>
@@ -409,200 +436,246 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Üstteki büyük kart */}
-            <div
-              className={`${getCardBackgroundClass()} w-full rounded-xl shadow-lg overflow-hidden mb-6 text-white`}
-            >
-              <div className="p-6 text-center">
-                <h2 className="text-3xl font-bold mb-1">{weather.name}</h2>
-                <p className="text-sm mb-4 opacity-70">
-                  {formatDate(dailyForecast[activeDay]?.dt || Date.now() / 1000, "full")}
-                </p>
-                <div className="flex flex-col md:flex-row items-center justify-center">
-                  <img
-                    src={getWeatherIcon(
-                      dailyForecast[activeDay]?.weather[0]?.icon ||
-                        weather.weather[0]?.icon
-                    )}
-                    alt="Hava Durumu İkonu"
-                    className="w-32 h-32 my-2"
-                  />
-                  <div className="text-center">
-                    <p className="text-6xl font-bold">
-                      {Math.round(
-                        showDailyView
-                          ? dailyForecast[activeDay]?.temp.day || weather.main.temp
-                          : weather.main.temp
-                      )}
-                      °
-                    </p>
-                    <p className="text-xl capitalize opacity-90">
-                      {showDailyView
-                        ? dailyForecast[activeDay]?.weather[0]?.description
-                        : weather.weather[0]?.description || ""}
-                    </p>
-                  </div>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
-                  <div className="bg-white/10 p-3 rounded-lg flex items-center">
-                    <Thermometer className="h-5 w-5 mr-2" />
-                    <div>
-                      <p className="text-sm opacity-70">Hissedilen</p>
-                      <p className="font-semibold">
-                        {Math.round(
-                          showDailyView
-                            ? dailyForecast[activeDay]?.feels_like.day ||
-                                weather.main.feels_like
-                            : weather.main.feels_like
-                        )}
-                        °C
-                      </p>
-                    </div>
-                  </div>
-                  <div className="bg-white/10 p-3 rounded-lg flex items-center">
-                    <Droplets className="h-5 w-5 mr-2" />
-                    <div>
-                      <p className="text-sm opacity-70">Nem</p>
-                      <p className="font-semibold">
-                        {showDailyView
-                          ? dailyForecast[activeDay]?.humidity || weather.main.humidity
-                          : weather.main.humidity}
-                        %
-                      </p>
-                    </div>
-                  </div>
-                  <div className="bg-white/10 p-3 rounded-lg flex items-center">
-                    <Wind className="h-5 w-5 mr-2" />
-                    <div>
-                      <p className="text-sm opacity-70">Rüzgar</p>
-                      <p className="font-semibold">
-                        {Math.round(
-                          showDailyView
-                            ? dailyForecast[activeDay]?.wind_speed || weather.wind.speed
-                            : weather.wind.speed
-                        )}{" "}
-                        km/s
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-6 p-4 bg-white/5 rounded-lg">
-                  <p className="text-sm italic">
-                    🧥{" "}
-                    {getClothingAdvice(
-                      showDailyView
-                        ? dailyForecast[activeDay]?.temp.day || weather.main.temp
-                        : weather.main.temp
+            {/* Günlük Görünüm - Üstteki büyük kart */}
+            {showDailyView && (
+              <div
+                className={`${getCardBackgroundClass()}  rounded-xl shadow-lg overflow-hidden mb-6 text-white`}
+              >
+                <div className="p-6 text-center">
+                  <h2 className="text-3xl font-bold mb-1">{weather.name}</h2>
+                  <p className="text-sm mb-4 opacity-70">
+                    {formatDate(
+                      dailyForecast[activeDay]?.dt || Date.now() / 1000,
+                      "full"
                     )}
                   </p>
+                  <div className="flex flex-col md:flex-row items-center justify-center">
+                    <img
+                      src={getWeatherIcon(
+                        dailyForecast[activeDay]?.weather[0]?.icon ||
+                          weather.weather[0]?.icon
+                      )}
+                      alt="Hava Durumu İkonu"
+                      className="w-32 h-32 my-2"
+                    />
+                    <div className="text-center">
+                      <p className="text-6xl font-bold">
+                        {Math.round(
+                          dailyForecast[activeDay]?.temp.day ||
+                            weather.main.temp
+                        )}
+                        °
+                      </p>
+                      <p className="text-xl capitalize opacity-90">
+                        {dailyForecast[activeDay]?.weather[0]?.description}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
+                    <div className="bg-white/10 p-3 rounded-lg flex items-center">
+                      <Thermometer className="h-5 w-5 mr-2" />
+                      <div>
+                        <p className="text-sm opacity-70">Hissedilen</p>
+                        <p className="font-semibold">
+                          {Math.round(
+                            dailyForecast[activeDay]?.feels_like.day ||
+                              weather.main.feels_like
+                          )}
+                          °C
+                        </p>
+                      </div>
+                    </div>
+                    <div className="bg-white/10 p-3 rounded-lg flex items-center">
+                      <Droplets className="h-5 w-5 mr-2" />
+                      <div>
+                        <p className="text-sm opacity-70">Nem</p>
+                        <p className="font-semibold">
+                          {dailyForecast[activeDay]?.humidity ||
+                            weather.main.humidity}
+                          %
+                        </p>
+                      </div>
+                    </div>
+                    <div className="bg-white/10 p-3 rounded-lg flex items-center">
+                      <Wind className="h-5 w-5 mr-2" />
+                      <div>
+                        <p className="text-sm opacity-70">Rüzgar</p>
+                        <p className="font-semibold">
+                          {Math.round(
+                            dailyForecast[activeDay]?.wind_speed ||
+                              weather.wind.speed
+                          )}{" "}
+                          km/s
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-6 p-4 bg-white/5 rounded-lg">
+                    <p className="text-sm italic">
+                      🧥{" "}
+                      {getClothingAdvice(
+                        dailyForecast[activeDay]?.temp.day ||
+                          weather.main.temp
+                      )}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
             {/* Saatlik veya Günlük tahmin başlık */}
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-bold text-gray-800">
-                {showDailyView ? "7 Günlük Tahmin" : "Saatlik Tahmin"}
+                {showDailyView ? "7 Günlük Tahmin" : `${weather.name} - Saatlik Tahmin`}
               </h3>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => scrollCards("left")}
-                  className="bg-gray-200 hover:bg-gray-300 rounded-full p-2 transition-all text-gray-700"
-                >
-                  <ChevronLeft className="h-5 w-5" />
-                </button>
-                <button
-                  onClick={() => scrollCards("right")}
-                  className="bg-gray-200 hover:bg-gray-300 rounded-full p-2 transition-all text-gray-700"
-                >
-                  <ChevronRight className="h-5 w-5" />
-                </button>
-              </div>
+              {showDailyView && (
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => scrollCards("left")}
+                    className="bg-gray-200 hover:bg-gray-300 rounded-full p-2 transition-all text-gray-700"
+                  >
+                    <ChevronLeft className="h-5 w-5" />
+                  </button>
+                  <button
+                    onClick={() => scrollCards("right")}
+                    className="bg-gray-200 hover:bg-gray-300 rounded-full p-2 transition-all text-gray-700"
+                  >
+                    <ChevronRight className="h-5 w-5" />
+                  </button>
+                </div>
+              )}
             </div>
 
-            {showDailyView ? (
-              <div
-                ref={cardsRef}
-                className="flex overflow-x-auto pb-4 gap-4 hide-scrollbar"
-                style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-              >
-                {dailyForecast.map((day, index) => {
-                  const isActive = index === activeDay;
-                  return (
-                    <div
-                      key={index}
-                      onClick={() => changeActiveDay(index)}
-                      className={`flex-none w-36 p-4 rounded-xl shadow-lg cursor-pointer text-white relative ${
-                        getDailyCardBackground(day.temp.day)
-                      } ${isActive ? "border-2 border-black" : "border-0"}`}
-                    >
-                      <p className="text-center font-medium mb-2">
-                        {formatDate(day.dt, "day")}
-                      </p>
-                      <div className="flex flex-col items-center">
-                        <img
-                          src={getWeatherIcon(day.weather[0].icon)}
-                          alt="Hava Durumu"
-                          className="w-16 h-16"
-                        />
-                        <p className="text-lg font-bold my-1">
-                          {Math.round(day.temp.day)}°
+            {/* Günlük Tahmin */}
+            {showDailyView && (
+              <div className="-mx-4">
+                <div
+                  ref={cardsRef}
+                  className="flex overflow-x-auto pb-4 px-4 gap-4 hide-scrollbar"
+                  style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+                >
+                  {dailyForecast.map((day, index) => {
+                    const isActive = index === activeDay;
+                    return (
+                      <div
+                        key={index}
+                        onClick={() => changeActiveDay(index)}
+                        className={`flex-none w-36 p-4 rounded-xl shadow-lg cursor-pointer text-white relative ${
+                          getDailyCardBackground(day.temp.day)
+                        } ${isActive ? "border-2 border-black" : "border-0"}`}
+                      >
+                        <p className="text-center font-medium mb-2">
+                          {formatDate(day.dt, "day")}
                         </p>
-                        <p className="text-xs opacity-70">
-                          {Math.round(day.temp.min)}° / {Math.round(day.temp.max)}°
-                        </p>
-                        <p className="text-xs mt-2 capitalize truncate w-full text-center">
-                          {day.weather[0].description}
-                        </p>
+                        <div className="flex flex-col items-center">
+                          <img
+                            src={getWeatherIcon(day.weather[0].icon)}
+                            alt="Hava Durumu"
+                            className="w-16 h-16"
+                          />
+                          <p className="text-lg font-bold my-1">
+                            {Math.round(day.temp.day)}°
+                          </p>
+                          <p className="text-xs opacity-70">
+                            {Math.round(day.temp.min)}° /{" "}
+                            {Math.round(day.temp.max)}°
+                          </p>
+                          <p className="text-xs mt-2 capitalize truncate w-full text-center">
+                            {day.weather[0].description}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
-            ) : (
-              <div
-                ref={cardsRef}
-                className="flex overflow-x-auto pb-4 gap-4 hide-scrollbar"
-                style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-              >
-                {getHourlyForecastForActiveDay().map((hour, index) => {
-                  const hourTemp = hour.main.temp;
-                  return (
-                    <div
-                      key={index}
-                      className={`flex-none w-28 p-4 rounded-xl shadow-lg text-white ${getDailyCardBackground(
-                        hourTemp
-                      )}`}
-                    >
-                      <p className="text-center font-medium mb-2">
-                        {formatDate(hour.dt, "hour")}
-                      </p>
-                      <div className="flex flex-col items-center">
-                        <img
-                          src={getWeatherIcon(hour.weather[0].icon)}
-                          alt="Hava Durumu"
-                          className="w-14 h-14"
-                        />
-                        <p className="text-lg font-bold my-1">
-                          {Math.round(hour.main.temp)}°
-                        </p>
-                        <div className="flex items-center justify-center text-xs mt-1">
-                          <Wind className="h-3 w-3 mr-1" />
-                          <span>{Math.round(hour.wind.speed)} km/s</span>
-                        </div>
-                        <div className="flex items-center justify-center text-xs mt-1">
-                          <Droplets className="h-3 w-3 mr-1" />
-                          <span>{hour.main.humidity}%</span>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-                {getHourlyForecastForActiveDay().length === 0 && (
+            )}
+
+            {/* Saatlik Tahmin - Tablo Tasarımı */}
+            {!showDailyView && (
+              <div className="w-full">
+                {getHourlyForecastForActiveDay().length === 0 ? (
                   <div className="flex-1 flex items-center justify-center h-32 bg-gray-100 rounded-xl">
                     <p className="text-gray-600">
                       Bu gün için saatlik tahmin bulunmuyor
                     </p>
+                  </div>
+                ) : (
+                  <div className={`rounded-xl shadow-lg overflow-hidden ${getCardBackgroundClass()}`}>
+                    <div className="p-4 text-white">
+                      <p className="text-center text-lg font-medium mb-2">
+                        {formatDate(dailyForecast[activeDay]?.dt || Date.now() / 1000, "full")}
+                      </p>
+                      <div className="p-3 bg-white/5 rounded-lg inline-block mb-4 mx-auto text-center w-full">
+                        <p className="text-sm italic">
+                          🧥 {getClothingAdvice(weather.main.temp)}
+                        </p>
+                      </div>
+                      
+                      <div className="overflow-x-auto">
+                        <table className="w-full">
+                          <thead>
+                            <tr className="border-b border-white/20">
+                              <th className="pb-3 pr-6 text-left">Saat</th>
+                              <th className="pb-3 px-4 text-center">Sıcaklık</th>
+                              <th className="pb-3 px-4 text-center hidden md:table-cell">Hissedilen</th>
+                              <th className="pb-3 px-4 text-center">Durum</th>
+                              <th className="pb-3 px-4 text-center hidden sm:table-cell">Nem</th>
+                              <th className="pb-3 px-4 text-center hidden sm:table-cell">Rüzgar</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {getHourlyForecastForActiveDay().map((hour, index) => (
+                              <tr 
+                                key={index} 
+                                className={`${index % 2 === 0 ? 'bg-black/5' : ''}`}
+                              >
+                                <td className="py-4 pr-6 font-medium">
+                                  {formatDate(hour.dt, "hour")}
+                                </td>
+                                <td className="py-4 px-4 text-center">
+                                  <div className="flex items-center justify-center">
+                                    <span className="text-xl font-bold">
+                                      {Math.round(hour.main.temp)}°
+                                    </span>
+                                  </div>
+                                </td>
+                                <td className="py-4 px-4 text-center hidden md:table-cell">
+                                  <div className="flex items-center justify-center">
+                                    <Thermometer className="h-4 w-4 mr-1" />
+                                    <span>{Math.round(hour.main.feels_like)}°</span>
+                                  </div>
+                                </td>
+                                <td className="py-4 px-4">
+                                  <div className="flex items-center justify-center">
+                                    <img 
+                                      src={getWeatherIcon(hour.weather[0].icon)} 
+                                      alt="Hava Durumu" 
+                                      className="w-10 h-10 mr-1"
+                                    />
+                                    <span className="capitalize text-sm">
+                                      {hour.weather[0].description}
+                                    </span>
+                                  </div>
+                                </td>
+                                <td className="py-4 px-4 text-center hidden sm:table-cell">
+                                  <div className="flex items-center justify-center">
+                                    <Droplets className="h-4 w-4 mr-1" />
+                                    <span>{hour.main.humidity}%</span>
+                                  </div>
+                                </td>
+                                <td className="py-4 px-4 text-center hidden sm:table-cell">
+                                  <div className="flex items-center justify-center">
+                                    <Wind className="h-4 w-4 mr-1" />
+                                    <span>{Math.round(hour.wind.speed)} km/s</span>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
@@ -630,5 +703,5 @@ export default function Home() {
         )}
       </main>
     </div>
-  );
+  )
 }
